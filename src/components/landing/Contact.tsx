@@ -15,6 +15,11 @@ import {
 import { apiService, ContactFormData } from '../../utils/api';
 
 const Contact = () => {
+  const [contactContent, setContactContent] = React.useState({
+    title: 'Ready to Get Started?',
+    subtitle: 'Contact our experts today for a free consultation. We\'re here to help you achieve your career goals and protect your digital presence.'
+  });
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -25,6 +30,21 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [statusMessage, setStatusMessage] = useState('');
+
+  React.useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const content = await apiService.getWebsiteContent();
+        if (content && content.contact) {
+          setContactContent(content.contact);
+        }
+      } catch (error) {
+        console.error('Failed to fetch contact content:', error);
+        // Keep default content if API fails
+      }
+    };
+    fetchContent();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,12 +126,11 @@ const Contact = () => {
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
            <span className="text-gray-900">Ready to</span>{' '}
             <span className="bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
-              Get Started?
+              {contactContent.title.split(' ').slice(-2).join(' ')}
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Contact our experts today for a free consultation. We're here to help 
-            you achieve your career goals and protect your digital presence.
+            {contactContent.subtitle}
           </p>
         </motion.div>
 

@@ -28,6 +28,32 @@ const values = [
 ];
 
 const About = () => {
+  const [aboutContent, setAboutContent] = React.useState({
+    title: 'Your Trusted Career Partner',
+    description: 'Drave Digitals is more than just a consultancy. We\'re your comprehensive career protection and growth partner, combining job placement expertise with cybersecurity awareness and cutting-edge technology solutions.',
+    stats: [
+      { label: 'Happy Clients', value: '5000+', color: 'text-blue-400' },
+      { label: 'Success Rate', value: '98%', color: 'text-green-400' },
+      { label: 'Fraud Cases Resolved', value: '1200+', color: 'text-red-400' },
+      { label: 'Growth Rate', value: '150%', color: 'text-purple-400' }
+    ]
+  });
+
+  React.useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const content = await apiService.getWebsiteContent();
+        if (content && content.about) {
+          setAboutContent(content.about);
+        }
+      } catch (error) {
+        console.error('Failed to fetch about content:', error);
+        // Keep default content if API fails
+      }
+    };
+    fetchContent();
+  }, []);
+
   return (
     <section id="about" className="py-32 bg-white">
       <div className="max-w-7xl mx-auto px-6">
@@ -50,13 +76,11 @@ const About = () => {
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
            <span className="text-gray-900">Your Trusted</span>{' '}
             <span className="bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
-              Career Partner
+              {aboutContent.title.split(' ').slice(-2).join(' ')}
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Drave Digitals is more than just a consultancy. We're your comprehensive career 
-            protection and growth partner, combining job placement expertise with 
-            cybersecurity awareness and cutting-edge technology solutions.
+            {aboutContent.description}
           </p>
         </motion.div>
 
@@ -67,7 +91,7 @@ const About = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20"
         >
-          {stats.map((stat, index) => (
+          {aboutContent.stats.map((stat, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, scale: 0.8 }}

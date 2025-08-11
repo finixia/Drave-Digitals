@@ -247,6 +247,41 @@ class ApiService {
     return this.request('/website-content');
   }
 
+  // Testimonial endpoints
+  async getTestimonials() {
+    try {
+      return await this.request('/testimonials');
+    } catch (error) {
+      console.error('Failed to fetch testimonials:', error);
+      // Return empty array as fallback
+      return [];
+    }
+  }
+
+  async getTestimonialsAdmin() {
+    return this.request('/testimonials/admin');
+  }
+
+  async submitTestimonial(data: TestimonialData) {
+    return this.request('/testimonials', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateTestimonialStatus(testimonialId: string, approved: boolean, featured?: boolean) {
+    return this.request(`/testimonials/${testimonialId}/approve`, {
+      method: 'PUT',
+      body: JSON.stringify({ approved, featured }),
+    });
+  }
+
+  async deleteTestimonial(testimonialId: string) {
+    return this.request(`/testimonials/${testimonialId}`, {
+      method: 'DELETE',
+    });
+  }
+
   // User management
   async getUsers() {
     return this.request('/users');
@@ -316,6 +351,16 @@ class ApiService {
       body: JSON.stringify({ status }),
     });
   }
+}
+
+export interface TestimonialData {
+  name: string;
+  role: string;
+  company: string;
+  rating: number;
+  text: string;
+  avatar: string;
+  service: string;
 }
 
 export const apiService = new ApiService();

@@ -20,11 +20,12 @@ const Hero = () => {
     const fetchContent = async () => {
       try {
         const content = await apiService.getWebsiteContent();
-        if (content.hero) {
+        if (content && content.hero) {
           setHeroContent(content.hero);
         }
       } catch (error) {
         console.error('Failed to fetch hero content:', error);
+        // Keep default content if API fails
       }
     };
     fetchContent();

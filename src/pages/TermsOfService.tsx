@@ -18,24 +18,10 @@ const TermsOfService = () => {
         console.log('Terms of service fetched:', data);
         if (data && Object.keys(data).length > 0) {
           setTermsContent(data);
-        } else {
-          // Fallback to default content
-          setTermsContent({
-            title: 'Terms of Service',
-            subtitle: 'Legal Terms and Conditions',
-            introduction: 'Welcome to Drave Digitals ("Company," "we," "our," or "us"). By accessing or using our website, products, and services — including Job Consultancy, Cybercrime & Digital Forensics Solutions, and App Development — you ("User," "Client," or "You") agree to comply with and be bound by these Terms and Conditions.\n\nIf you do not agree with these Terms, please discontinue use of our services immediately.',
-            sections: []
-          });
         }
       } catch (error) {
         console.error('Failed to fetch terms of service:', error);
-        // Use default content on error
-        setTermsContent({
-          title: 'Terms of Service',
-          subtitle: 'Legal Terms and Conditions',
-          introduction: 'Welcome to Drave Digitals ("Company," "we," "our," or "us"). By accessing or using our website, products, and services — including Job Consultancy, Cybercrime & Digital Forensics Solutions, and App Development — you ("User," "Client," or "You") agree to comply with and be bound by these Terms and Conditions.\n\nIf you do not agree with these Terms, please discontinue use of our services immediately.',
-          sections: []
-        });
+        // Keep empty state on error to show loading failed
       } finally {
         setLoading(false);
       }
@@ -255,7 +241,7 @@ const TermsOfService = () => {
       {/* Content */}
       <div className="max-w-4xl mx-auto px-6 py-16">
         <div className="space-y-12">
-          {(termsContent.sections && termsContent.sections.length > 0 ? termsContent.sections : sections).map((section, index) => (
+          {sections.map((section, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}

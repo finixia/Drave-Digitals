@@ -441,6 +441,94 @@ const createDefaultDashboardStats = async () => {
   }
 };
 
+const createDefaultPrivacyPolicy = async () => {
+  try {
+    const existingPolicy = await PrivacyPolicy.findOne();
+    if (!existingPolicy) {
+      const defaultPolicy = new PrivacyPolicy({
+        title: 'Privacy Policy',
+        subtitle: 'How we protect your information',
+        introduction: 'Drave Digitals ("Company," "we," "our," or "us") respects your privacy and is committed to protecting your personal information. This Privacy Policy explains how we collect, use, store, and safeguard your data when you use our services — including Job Consultancy, Cybercrime & Digital Forensics, and App Development.',
+        contactInfo: {
+          email: 'privacy@dravedigitals.com',
+          phone: '+91 9876543210',
+          address: 'Mumbai, Maharashtra, India'
+        },
+        active: true
+      });
+      await defaultPolicy.save();
+      console.log('Default privacy policy created');
+    }
+  } catch (error) {
+    console.error('Error creating default privacy policy:', error);
+  }
+};
+
+const createDefaultTermsOfService = async () => {
+  try {
+    const existingTerms = await TermsOfService.findOne();
+    if (!existingTerms) {
+      const defaultTerms = new TermsOfService({
+        title: 'Terms of Service',
+        subtitle: 'Legal Terms and Conditions',
+        introduction: 'Welcome to Drave Digitals ("Company," "we," "our," or "us"). By accessing or using our website, products, and services — including Job Consultancy, Cybercrime & Digital Forensics Solutions, and App Development — you ("User," "Client," or "You") agree to comply with and be bound by these Terms and Conditions.\n\nIf you do not agree with these Terms, please discontinue use of our services immediately.',
+        contactInfo: {
+          email: 'legal@dravedigitals.com',
+          phone: '+91 9876543210',
+          address: 'Mumbai, Maharashtra, India'
+        },
+        active: true
+      });
+      await defaultTerms.save();
+      console.log('Default terms of service created');
+    }
+  } catch (error) {
+    console.error('Error creating default terms of service:', error);
+  }
+};
+
+const createDefaultAboutContent = async () => {
+  try {
+    const existingAbout = await AboutContent.findOne();
+    if (!existingAbout) {
+      const defaultAbout = new AboutContent({
+        title: 'Your Trusted Career Partner',
+        subtitle: 'About Us',
+        description: 'Drave Digitals is more than just a consultancy. We\'re your comprehensive career protection and growth partner, combining job placement expertise with cybersecurity awareness and cutting-edge technology solutions.',
+        values: [
+          {
+            title: 'Mission Driven',
+            description: 'Empowering careers while protecting against digital threats with innovative solutions.',
+            icon: 'Target'
+          },
+          {
+            title: 'Client First',
+            description: 'Your success is our priority. We provide personalized solutions for every client.',
+            icon: 'Heart'
+          },
+          {
+            title: 'Trust & Security',
+            description: 'Building trust through transparency, security, and reliable service delivery.',
+            icon: 'Shield'
+          }
+        ],
+        commitments: [
+          'Personalized career guidance for every individual',
+          'Comprehensive fraud protection and awareness',
+          'Cutting-edge technology solutions',
+          '24/7 support and consultation',
+          'Transparent pricing with no hidden costs',
+          'Continuous skill development programs'
+        ],
+        active: true
+      });
+      await defaultAbout.save();
+      console.log('Default about content created');
+    }
+  } catch (error) {
+    console.error('Error creating default about content:', error);
+  }
+};
 // Create default privacy policy
 const createDefaultPrivacyPolicy = async () => {
   try {
@@ -881,6 +969,213 @@ const authenticateAdmin = (req, res, next) => {
 // Routes
 
 // File serving route
+
+// Dashboard Stats Routes
+app.get('/api/dashboard-stats', async (req, res) => {
+  try {
+    const stats = await DashboardStats.findOne({ active: true });
+    if (!stats) {
+      return res.json({
+        happyClients: '5000+',
+        successRate: '98%',
+        growthRate: '150%',
+        fraudCasesResolved: '1200+'
+      });
+    }
+    res.json(stats);
+  } catch (error) {
+    console.error('Error fetching dashboard stats:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.put('/api/dashboard-stats', async (req, res) => {
+  try {
+    let stats = await DashboardStats.findOne({ active: true });
+    if (!stats) {
+      stats = new DashboardStats({ ...req.body, active: true });
+    } else {
+      Object.assign(stats, req.body);
+    }
+    await stats.save();
+    res.json(stats);
+  } catch (error) {
+    console.error('Error updating dashboard stats:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Contact Info Routes
+app.get('/api/contact-info', async (req, res) => {
+  try {
+    const contactInfo = await ContactInfo.findOne({ active: true });
+    if (!contactInfo) {
+      return res.json({
+        phone: ['+91 9876543210', '+91 9876543211'],
+        email: ['info@dravedigitals.com', 'support@dravedigitals.com'],
+        address: ['123 Business District', 'Bangalore, Karnataka 530068'],
+        workingHours: ['Mon - Fri: 9:00 AM - 7:00 PM', 'Sat: 10:00 AM - 4:00 PM']
+      });
+    }
+    res.json(contactInfo);
+  } catch (error) {
+    console.error('Error fetching contact info:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.put('/api/contact-info', async (req, res) => {
+  try {
+    let contactInfo = await ContactInfo.findOne({ active: true });
+    if (!contactInfo) {
+      contactInfo = new ContactInfo({ ...req.body, active: true });
+    } else {
+      Object.assign(contactInfo, req.body);
+    }
+    await contactInfo.save();
+    res.json(contactInfo);
+  } catch (error) {
+    console.error('Error updating contact info:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Privacy Policy Routes
+app.get('/api/privacy-policy', async (req, res) => {
+  try {
+    const privacyPolicy = await PrivacyPolicy.findOne({ active: true });
+    if (!privacyPolicy) {
+      return res.json({
+        title: 'Privacy Policy',
+        subtitle: 'How we protect your information',
+        introduction: 'Drave Digitals ("Company," "we," "our," or "us") respects your privacy and is committed to protecting your personal information.',
+        contactInfo: {
+          email: 'privacy@dravedigitals.com',
+          phone: '+91 9876543210',
+          address: 'Mumbai, Maharashtra, India'
+        }
+      });
+    }
+    res.json(privacyPolicy);
+  } catch (error) {
+    console.error('Error fetching privacy policy:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.put('/api/privacy-policy', async (req, res) => {
+  try {
+    let privacyPolicy = await PrivacyPolicy.findOne({ active: true });
+    if (!privacyPolicy) {
+      privacyPolicy = new PrivacyPolicy({ ...req.body, active: true });
+    } else {
+      Object.assign(privacyPolicy, req.body);
+    }
+    await privacyPolicy.save();
+    res.json(privacyPolicy);
+  } catch (error) {
+    console.error('Error updating privacy policy:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Terms of Service Routes
+app.get('/api/terms-of-service', async (req, res) => {
+  try {
+    const termsOfService = await TermsOfService.findOne({ active: true });
+    if (!termsOfService) {
+      return res.json({
+        title: 'Terms of Service',
+        subtitle: 'Legal Terms and Conditions',
+        introduction: 'Welcome to Drave Digitals ("Company," "we," "our," or "us"). By accessing or using our website, products, and services — including Job Consultancy, Cybercrime & Digital Forensics Solutions, and App Development — you ("User," "Client," or "You") agree to comply with and be bound by these Terms and Conditions.',
+        contactInfo: {
+          email: 'legal@dravedigitals.com',
+          phone: '+91 9876543210',
+          address: 'Mumbai, Maharashtra, India'
+        }
+      });
+    }
+    res.json(termsOfService);
+  } catch (error) {
+    console.error('Error fetching terms of service:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.put('/api/terms-of-service', async (req, res) => {
+  try {
+    let termsOfService = await TermsOfService.findOne({ active: true });
+    if (!termsOfService) {
+      termsOfService = new TermsOfService({ ...req.body, active: true });
+    } else {
+      Object.assign(termsOfService, req.body);
+    }
+    await termsOfService.save();
+    res.json(termsOfService);
+  } catch (error) {
+    console.error('Error updating terms of service:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// About Content Routes
+app.get('/api/about-content', async (req, res) => {
+  try {
+    const aboutContent = await AboutContent.findOne({ active: true });
+    if (!aboutContent) {
+      return res.json({
+        title: 'Your Trusted Career Partner',
+        subtitle: 'About Us',
+        description: 'Drave Digitals is more than just a consultancy. We\'re your comprehensive career protection and growth partner, combining job placement expertise with cybersecurity awareness and cutting-edge technology solutions.',
+        values: [
+          {
+            title: 'Mission Driven',
+            description: 'Empowering careers while protecting against digital threats with innovative solutions.',
+            icon: 'Target'
+          },
+          {
+            title: 'Client First',
+            description: 'Your success is our priority. We provide personalized solutions for every client.',
+            icon: 'Heart'
+          },
+          {
+            title: 'Trust & Security',
+            description: 'Building trust through transparency, security, and reliable service delivery.',
+            icon: 'Shield'
+          }
+        ],
+        commitments: [
+          'Personalized career guidance for every individual',
+          'Comprehensive fraud protection and awareness',
+          'Cutting-edge technology solutions',
+          '24/7 support and consultation',
+          'Transparent pricing with no hidden costs',
+          'Continuous skill development programs'
+        ]
+      });
+    }
+    res.json(aboutContent);
+  } catch (error) {
+    console.error('Error fetching about content:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.put('/api/about-content', async (req, res) => {
+  try {
+    let aboutContent = await AboutContent.findOne({ active: true });
+    if (!aboutContent) {
+      aboutContent = new AboutContent({ ...req.body, active: true });
+    } else {
+      Object.assign(aboutContent, req.body);
+    }
+    await aboutContent.save();
+    res.json(aboutContent);
+  } catch (error) {
+    console.error('Error updating about content:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 app.get('/api/uploads/:filename', (req, res) => {
   const filename = req.params.filename;
   const filePath = path.join(__dirname, 'uploads', filename);

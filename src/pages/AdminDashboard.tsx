@@ -208,22 +208,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
-    if (activeTab === 'services') {
-      fetchServices();
-    } else if (activeTab === 'testimonials') {
-      fetchTestimonials();
-    } else if (activeTab === 'about') {
-      fetchAboutContent();
-    } else if (activeTab === 'contact') {
-      fetchContactInfo();
-    } else if (activeTab === 'stats') {
-      fetchDashboardStats();
-    } else if (activeTab === 'privacy') {
-      fetchPrivacyPolicy();
-    } else if (activeTab === 'terms') {
-      fetchTermsOfService();
-    }
-  }, [activeTab]);
+  }, []);
 
   const fetchDashboardData = async () => {
     try {
@@ -249,6 +234,62 @@ const AdminDashboard = () => {
       setError('Failed to load dashboard data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchContactInfo = async () => {
+    try {
+      setContactLoading(true);
+      const data = await apiService.getContactInfo();
+      if (data && Object.keys(data).length > 0) {
+        setContactInfo(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch contact info:', error);
+    } finally {
+      setContactLoading(false);
+    }
+  };
+  
+  const fetchDashboardStats = async () => {
+    try {
+      setStatsLoading(true);
+      const data = await apiService.getDashboardStatsData();
+      if (data && Object.keys(data).length > 0) {
+        setDashboardStats(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch dashboard stats:', error);
+    } finally {
+      setStatsLoading(false);
+    }
+  };
+  
+  const fetchPrivacyPolicy = async () => {
+    try {
+      setPrivacyLoading(true);
+      const data = await apiService.getPrivacyPolicy();
+      if (data && Object.keys(data).length > 0) {
+        setPrivacyPolicy(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch privacy policy:', error);
+    } finally {
+      setPrivacyLoading(false);
+    }
+  };
+  
+  const fetchTermsOfService = async () => {
+    try {
+      setTermsLoading(true);
+      const data = await apiService.getTermsOfService();
+      if (data && Object.keys(data).length > 0) {
+        setTermsOfService(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch terms of service:', error);
+    } finally {
+      setTermsLoading(false);
     }
   };
 

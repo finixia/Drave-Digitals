@@ -125,6 +125,46 @@ const userSchema = new mongoose.Schema({
   
   createdAt: { type: Date, default: Date.now }
 });
+// Privacy Policy Schema
+const privacyPolicySchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  subtitle: { type: String, required: true },
+  introduction: { type: String, required: true },
+  contactInfo: {
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
+    address: { type: String, required: true }
+  },
+  active: { type: Boolean, default: true }
+}, { timestamps: true });
+
+// Terms of Service Schema
+const termsOfServiceSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  subtitle: { type: String, required: true },
+  introduction: { type: String, required: true },
+  contactInfo: {
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
+    address: { type: String, required: true }
+  },
+  active: { type: Boolean, default: true }
+}, { timestamps: true });
+
+// About Content Schema
+const aboutContentSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  subtitle: { type: String, required: true },
+  description: { type: String, required: true },
+  values: [{
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    icon: { type: String, required: true }
+  }],
+  commitments: [{ type: String, required: true }],
+  active: { type: Boolean, default: true }
+}, { timestamps: true });
+
 
 const User = mongoose.model('User', userSchema);
 
@@ -282,6 +322,9 @@ const dashboardStatsSchema = new mongoose.Schema({
 });
 
 const DashboardStats = mongoose.model('DashboardStats', dashboardStatsSchema);
+const PrivacyPolicy = mongoose.model('PrivacyPolicy', privacyPolicySchema);
+const TermsOfService = mongoose.model('TermsOfService', termsOfServiceSchema);
+const AboutContent = mongoose.model('AboutContent', aboutContentSchema);
 
 const termsOfServiceSchema = new mongoose.Schema({
   title: { type: String, required: true },

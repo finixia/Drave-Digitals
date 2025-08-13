@@ -144,6 +144,56 @@ const AdminDashboard = () => {
   });
 
   const [aboutForm, setAboutForm] = useState<AboutContentData>({
+  
+  // Contact Info state
+  const [contactInfo, setContactInfo] = useState({
+    phone: [''],
+    email: [''],
+    address: [''],
+    workingHours: ['']
+  });
+  const [contactLoading, setContactLoading] = useState(false);
+  const [editingContact, setEditingContact] = useState(false);
+  
+  // Dashboard Stats state
+  const [dashboardStats, setDashboardStats] = useState({
+    happyClients: '',
+    successRate: '',
+    growthRate: '',
+    fraudCasesResolved: ''
+  });
+  const [statsLoading, setStatsLoading] = useState(false);
+  const [editingStats, setEditingStats] = useState(false);
+  
+  // Privacy Policy state
+  const [privacyPolicy, setPrivacyPolicy] = useState({
+    title: '',
+    subtitle: '',
+    introduction: '',
+    sections: [],
+    contactInfo: {
+      email: '',
+      phone: '',
+      address: ''
+    }
+  });
+  const [privacyLoading, setPrivacyLoading] = useState(false);
+  const [editingPrivacy, setEditingPrivacy] = useState(false);
+  
+  // Terms of Service state
+  const [termsOfService, setTermsOfService] = useState({
+    title: '',
+    subtitle: '',
+    introduction: '',
+    sections: [],
+    contactInfo: {
+      email: '',
+      phone: '',
+      address: ''
+    }
+  });
+  const [termsLoading, setTermsLoading] = useState(false);
+  const [editingTerms, setEditingTerms] = useState(false);
     title: '',
     subtitle: '',
     description: '',

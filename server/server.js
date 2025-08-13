@@ -837,6 +837,96 @@ app.delete('/api/users/:id', authenticateAdmin, async (req, res) => {
   }
 });
 
+// Privacy Policy Routes
+app.get('/api/privacy-policy', async (req, res) => {
+  try {
+    console.log('Fetching privacy policy from database...');
+    // Check MongoDB connection
+    if (mongoose.connection.readyState !== 1) {
+      console.error('MongoDB not connected');
+      return res.status(500).json({ message: 'Database connection error' });
+    }
+    
+    const privacyPolicy = await PrivacyPolicy.findOne({ active: true });
+    console.log('Found privacy policy:', privacyPolicy);
+    res.json(privacyPolicy || {});
+  } catch (error) {
+    console.error('Error fetching privacy policy:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+app.put('/api/privacy-policy', authenticateAdmin, async (req, res) => {
+  try {
+    console.log('Updating privacy policy:', req.body);
+    
+    // Find existing privacy policy or create new
+    let privacyPolicy = await PrivacyPolicy.findOne({ active: true });
+    
+    if (privacyPolicy) {
+      // Update existing
+      Object.assign(privacyPolicy, req.body);
+      privacyPolicy.lastUpdated = new Date();
+      await privacyPolicy.save();
+    } else {
+      // Create new
+      privacyPolicy = new PrivacyPolicy({ ...req.body, active: true });
+      await privacyPolicy.save();
+    }
+    
+    console.log('Privacy policy updated successfully');
+    res.json({ message: 'Privacy policy updated successfully' });
+  } catch (error) {
+    console.error('Error updating privacy policy:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// Terms of Service Routes
+app.get('/api/terms-of-service', async (req, res) => {
+  try {
+    console.log('Fetching terms of service from database...');
+    // Check MongoDB connection
+    if (mongoose.connection.readyState !== 1) {
+      console.error('MongoDB not connected');
+      return res.status(500).json({ message: 'Database connection error' });
+    }
+    
+    const termsOfService = await TermsOfService.findOne({ active: true });
+    console.log('Found terms of service:', termsOfService);
+    res.json(termsOfService || {});
+  } catch (error) {
+    console.error('Error fetching terms of service:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+app.put('/api/terms-of-service', authenticateAdmin, async (req, res) => {
+  try {
+    console.log('Updating terms of service:', req.body);
+    
+    // Find existing terms of service or create new
+    let termsOfService = await TermsOfService.findOne({ active: true });
+    
+    if (termsOfService) {
+      // Update existing
+      Object.assign(termsOfService, req.body);
+      termsOfService.lastUpdated = new Date();
+      await termsOfService.save();
+    } else {
+      // Create new
+      termsOfService = new TermsOfService({ ...req.body, active: true });
+      await termsOfService.save();
+    }
+    
+    console.log('Terms of service updated successfully');
+    res.json({ message: 'Terms of service updated successfully' });
+  } catch (error) {
+    console.error('Error updating terms of service:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

@@ -208,7 +208,22 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
-  }, []);
+    if (activeTab === 'services') {
+      fetchServices();
+    } else if (activeTab === 'testimonials') {
+      fetchTestimonials();
+    } else if (activeTab === 'about') {
+      fetchAboutContent();
+    } else if (activeTab === 'contact') {
+      fetchContactInfo();
+    } else if (activeTab === 'stats') {
+      fetchDashboardStats();
+    } else if (activeTab === 'privacy') {
+      fetchPrivacyPolicy();
+    } else if (activeTab === 'terms') {
+      fetchTermsOfService();
+    }
+  }, [activeTab]);
 
   const fetchDashboardData = async () => {
     try {

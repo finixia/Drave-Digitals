@@ -237,62 +237,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const fetchContactInfo = async () => {
-    try {
-      setContactLoading(true);
-      const data = await apiService.getContactInfo();
-      if (data && Object.keys(data).length > 0) {
-        setContactInfo(data);
-      }
-    } catch (error) {
-      console.error('Failed to fetch contact info:', error);
-    } finally {
-      setContactLoading(false);
-    }
-  };
-  
-  const fetchDashboardStats = async () => {
-    try {
-      setStatsLoading(true);
-      const data = await apiService.getDashboardStatsData();
-      if (data && Object.keys(data).length > 0) {
-        setDashboardStats(data);
-      }
-    } catch (error) {
-      console.error('Failed to fetch dashboard stats:', error);
-    } finally {
-      setStatsLoading(false);
-    }
-  };
-  
-  const fetchPrivacyPolicy = async () => {
-    try {
-      setPrivacyLoading(true);
-      const data = await apiService.getPrivacyPolicy();
-      if (data && Object.keys(data).length > 0) {
-        setPrivacyPolicy(data);
-      }
-    } catch (error) {
-      console.error('Failed to fetch privacy policy:', error);
-    } finally {
-      setPrivacyLoading(false);
-    }
-  };
-  
-  const fetchTermsOfService = async () => {
-    try {
-      setTermsLoading(true);
-      const data = await apiService.getTermsOfService();
-      if (data && Object.keys(data).length > 0) {
-        setTermsOfService(data);
-      }
-    } catch (error) {
-      console.error('Failed to fetch terms of service:', error);
-    } finally {
-      setTermsLoading(false);
-    }
-  };
-
   const handleLogout = () => {
     logout();
     navigate('/admin/login');
@@ -387,6 +331,66 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('Failed to save about content:', error);
       alert(`Failed to save about content: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
+
+  const handleUpdateContact = async () => {
+    try {
+      setSubmitStatus('idle');
+      await apiService.updateContactInfo(contactInfo);
+      setSubmitStatus('success');
+      setStatusMessage('Contact info updated successfully!');
+      setEditingContact(false);
+      setTimeout(() => setSubmitStatus('idle'), 3000);
+    } catch (error) {
+      setSubmitStatus('error');
+      setStatusMessage('Failed to update contact info');
+      setTimeout(() => setSubmitStatus('idle'), 3000);
+    }
+  };
+  
+  const handleUpdateStats = async () => {
+    try {
+      setSubmitStatus('idle');
+      await apiService.updateDashboardStats(dashboardStats);
+      setSubmitStatus('success');
+      setStatusMessage('Dashboard stats updated successfully!');
+      setEditingStats(false);
+      setTimeout(() => setSubmitStatus('idle'), 3000);
+    } catch (error) {
+      setSubmitStatus('error');
+      setStatusMessage('Failed to update dashboard stats');
+      setTimeout(() => setSubmitStatus('idle'), 3000);
+    }
+  };
+  
+  const handleUpdatePrivacy = async () => {
+    try {
+      setSubmitStatus('idle');
+      await apiService.updatePrivacyPolicy(privacyPolicy);
+      setSubmitStatus('success');
+      setStatusMessage('Privacy policy updated successfully!');
+      setEditingPrivacy(false);
+      setTimeout(() => setSubmitStatus('idle'), 3000);
+    } catch (error) {
+      setSubmitStatus('error');
+      setStatusMessage('Failed to update privacy policy');
+      setTimeout(() => setSubmitStatus('idle'), 3000);
+    }
+  };
+  
+  const handleUpdateTerms = async () => {
+    try {
+      setSubmitStatus('idle');
+      await apiService.updateTermsOfService(termsOfService);
+      setSubmitStatus('success');
+      setStatusMessage('Terms of service updated successfully!');
+      setEditingTerms(false);
+      setTimeout(() => setSubmitStatus('idle'), 3000);
+    } catch (error) {
+      setSubmitStatus('error');
+      setStatusMessage('Failed to update terms of service');
+      setTimeout(() => setSubmitStatus('idle'), 3000);
     }
   };
 

@@ -30,7 +30,8 @@ import {
   ExternalLink,
   Edit2,
   Heart,
-  Target
+  Target,
+  Database
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -331,66 +332,6 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('Failed to save about content:', error);
       alert(`Failed to save about content: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  };
-
-  const handleUpdateContact = async () => {
-    try {
-      setSubmitStatus('idle');
-      await apiService.updateContactInfo(contactInfo);
-      setSubmitStatus('success');
-      setStatusMessage('Contact info updated successfully!');
-      setEditingContact(false);
-      setTimeout(() => setSubmitStatus('idle'), 3000);
-    } catch (error) {
-      setSubmitStatus('error');
-      setStatusMessage('Failed to update contact info');
-      setTimeout(() => setSubmitStatus('idle'), 3000);
-    }
-  };
-  
-  const handleUpdateStats = async () => {
-    try {
-      setSubmitStatus('idle');
-      await apiService.updateDashboardStats(dashboardStats);
-      setSubmitStatus('success');
-      setStatusMessage('Dashboard stats updated successfully!');
-      setEditingStats(false);
-      setTimeout(() => setSubmitStatus('idle'), 3000);
-    } catch (error) {
-      setSubmitStatus('error');
-      setStatusMessage('Failed to update dashboard stats');
-      setTimeout(() => setSubmitStatus('idle'), 3000);
-    }
-  };
-  
-  const handleUpdatePrivacy = async () => {
-    try {
-      setSubmitStatus('idle');
-      await apiService.updatePrivacyPolicy(privacyPolicy);
-      setSubmitStatus('success');
-      setStatusMessage('Privacy policy updated successfully!');
-      setEditingPrivacy(false);
-      setTimeout(() => setSubmitStatus('idle'), 3000);
-    } catch (error) {
-      setSubmitStatus('error');
-      setStatusMessage('Failed to update privacy policy');
-      setTimeout(() => setSubmitStatus('idle'), 3000);
-    }
-  };
-  
-  const handleUpdateTerms = async () => {
-    try {
-      setSubmitStatus('idle');
-      await apiService.updateTermsOfService(termsOfService);
-      setSubmitStatus('success');
-      setStatusMessage('Terms of service updated successfully!');
-      setEditingTerms(false);
-      setTimeout(() => setSubmitStatus('idle'), 3000);
-    } catch (error) {
-      setSubmitStatus('error');
-      setStatusMessage('Failed to update terms of service');
-      setTimeout(() => setSubmitStatus('idle'), 3000);
     }
   };
 
@@ -1397,30 +1338,107 @@ const AdminDashboard = () => {
       <div className="flex">
         {/* Sidebar */}
         <nav className="w-64 bg-white border-r border-gray-200 min-h-screen p-6">
-          <div className="space-y-2">
-            {[
-              { id: 'overview', label: 'Overview', icon: BarChart3 },
-              { id: 'contacts', label: 'Contacts', icon: MessageSquare },
-              { id: 'users', label: 'Users', icon: Users },
-              { id: 'testimonials', label: 'Testimonials', icon: Star },
-              { id: 'services', label: 'Services', icon: Settings },
-              { id: 'about', label: 'About Us', icon: FileText }
-            ].map((tab) => (
-              <motion.button
-                key={tab.id}
-                whileHover={{ x: 5 }}
-                onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${
-                  activeTab === tab.id
-                    ? 'bg-red-50 text-red-600 border-r-2 border-red-600'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <tab.icon size={20} />
-                <span>{tab.label}</span>
-              </motion.button>
-            ))}
-          </div>
+          <nav className="space-y-2">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors ${
+                activeTab === 'overview' ? 'bg-red-500 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <BarChart3 size={20} />
+              <span>Overview</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('contacts')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors ${
+                activeTab === 'contacts' ? 'bg-red-500 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <MessageSquare size={20} />
+              <span>Contacts</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('users')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors ${
+                activeTab === 'users' ? 'bg-red-500 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <Users size={20} />
+              <span>Users</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('testimonials')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors ${
+                activeTab === 'testimonials' ? 'bg-red-500 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <Star size={20} />
+              <span>Testimonials</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('services')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors ${
+                activeTab === 'services' ? 'bg-red-500 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <Award size={20} />
+              <span>Services</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('about')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors ${
+                activeTab === 'about' ? 'bg-red-500 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <FileText size={20} />
+              <span>About Us</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('contact')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors ${
+                activeTab === 'contact' ? 'bg-red-500 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <Phone size={20} />
+              <span>Contact Info</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('stats')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors ${
+                activeTab === 'stats' ? 'bg-red-500 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <Database size={20} />
+              <span>Dashboard Stats</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('privacy')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors ${
+                activeTab === 'privacy' ? 'bg-red-500 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <Shield size={20} />
+              <span>Privacy Policy</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('terms')}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-colors ${
+                activeTab === 'terms' ? 'bg-red-500 text-white' : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <Settings size={20} />
+              <span>Terms of Service</span>
+            </button>
+          </nav>
         </nav>
 
         {/* Main Content */}
